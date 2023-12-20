@@ -1,18 +1,21 @@
 /*  WiFi softAP Example
 
-   This example code is in the Public Domain (or CC0 licensed, at your option.)
+ This example code is in the Public Domain (or CC0 licensed, at your option.)
 
-   Unless required by applicable law or agreed to in writing, this
-   software is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-   CONDITIONS OF ANY KIND, either express or implied.
+ Unless required by applicable law or agreed to in writing, this
+ software is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+ CONDITIONS OF ANY KIND, either express or implied.
 */
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "esp_mac.h"
 #include "esp_wifi.h"
+#include "esp_system.h"
 #include "esp_event.h"
 #include "esp_log.h"
 #include "nvs_flash.h"
+#include "driver/uart.h"
+#include "string.h"
 
 #include "lwip/err.h"
 #include "lwip/sys.h"
@@ -26,6 +29,7 @@
 
 static const char *TAG = "gag";
 static bool LED_STATE = false;
+static const int RX_BUF_SIZE = 1024;
 
 /* The examples use WiFi configuration that you can set via project configuration menu.
 
@@ -37,6 +41,11 @@ static bool LED_STATE = false;
 #define EXAMPLE_ESP_WIFI_CHANNEL CONFIG_ESP_WIFI_CHANNEL
 #define EXAMPLE_MAX_STA_CONN CONFIG_ESP_MAX_STA_CONN
 #define LED_PIN 11
+
+#define TXD_PIN (GPIO_NUM_4)
+#define RXD_PIN (GPIO_NUM_5)
+#define KNECSMOM (GPIO_NUM_3)
+#define KNECSDAD (GPIO_NUM_2)
 
 static void wifi_event_handler(void *arg, esp_event_base_t event_base,
                                int32_t event_id, void *event_data)
@@ -100,6 +109,94 @@ void wifi_init_softap(void)
     ESP_LOGI(TAG, "wifi_init_softap finished. SSID:%s password:%s channel:%d",
              EXAMPLE_ESP_WIFI_SSID, EXAMPLE_ESP_WIFI_PASS, EXAMPLE_ESP_WIFI_CHANNEL);
 }
+
+// UART
+void initUART(void)
+{
+    const uart_config_t uart_config = {
+        .baud_rate = 115200,
+        .data_bits = UART_DATA_8_BITS,
+        .parity = UART_PARITY_DISABLE,
+        .stop_bits = UART_STOP_BITS_1,
+        .flow_ctrl = UART_HW_FLOWCTRL_DISABLE,
+        .source_clk = UART_SCLK_DEFAULT,
+    };
+    // We won't use a buffer for sending data.
+    uart_driver_install(UART_NUM_1, RX_BUF_SIZE * 2, 0, 0, NULL, 0);
+    uart_param_config(UART_NUM_1, &uart_config);
+    uart_set_pin(UART_NUM_1, TXD_PIN, RXD_PIN, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE);
+    uart_set_pin(UART_NUM_0, KNECSMOM, KNECSDAD, UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE);
+}
+
+int sendData(const char *logName, const uint8_t *data, int UART_PORT)
+{
+    // const int len = strlen(data);
+    const int txBytes = uart_write_bytes(UART_PORT, data, 8);
+    ESP_LOGI(logName, "Wrote %d bytes", txBytes);
+    return txBytes;
+}
+/*
+static void writeUARTNUM1_DISPLAY(void *arg)
+{
+    static const char *TX_TASK_TAG = "TX_TASK";
+    esp_log_level_set(TX_TASK_TAG, ESP_LOG_INFO);
+    while (1)
+    {
+        sendData(TX_TASK_TAG, "Hello world", UART_NUM_1);
+        vTaskDelay(2000 / portTICK_PERIOD_MS);
+    }
+}
+
+static void writeUARTNUM0_STM(void *arg)
+{
+    static const char *TX_TASK_TAG = "TX_TASK";
+    esp_log_level_set(TX_TASK_TAG, ESP_LOG_INFO);
+    while (1)
+    {
+        sendData(TX_TASK_TAG, "Hello world", UART_NUM_0);
+        vTaskDelay(2000 / portTICK_PERIOD_MS);
+    }
+}*/
+
+static void readUARTNUM1_DISPLAY(void *arg)
+{
+    static const char *RX_TASK_TAG = "RX_TASK";
+    esp_log_level_set(RX_TASK_TAG, ESP_LOG_INFO);
+    uint8_t *data = (uint8_t *)malloc(RX_BUF_SIZE + 1);
+    while (1)
+    {
+        const int rxBytes = uart_read_bytes(UART_NUM_1, data, RX_BUF_SIZE, 1000 / portTICK_PERIOD_MS);
+        if (rxBytes > 0)
+        {
+            data[rxBytes] = 0;
+            ESP_LOGI(RX_TASK_TAG, "Read %d bytes: '%s'", rxBytes, data);
+            ESP_LOG_BUFFER_HEXDUMP(RX_TASK_TAG, data, rxBytes, ESP_LOG_INFO);
+
+            sendData("TX_TSAK_TAG", *data, UART_NUM_0);
+        }
+    }
+    free(data);
+}
+static void readUARTNUM0_STM(void *arg)
+{
+    static const char *RX_TASK_TAG = "RX_TASK";
+    esp_log_level_set(RX_TASK_TAG, ESP_LOG_INFO);
+    uint8_t *data = (uint8_t *)malloc(RX_BUF_SIZE + 1);
+    while (1)
+    {
+        const int rxBytes = uart_read_bytes(UART_NUM_0, data, RX_BUF_SIZE, 1000 / portTICK_PERIOD_MS);
+        if (rxBytes > 0)
+        {
+            data[rxBytes] = 0;
+            ESP_LOGI(RX_TASK_TAG, "Read %d bytes: '%s'", rxBytes, data);
+            ESP_LOG_BUFFER_HEXDUMP(RX_TASK_TAG, data, rxBytes, ESP_LOG_INFO);
+
+            sendData("TX_TSAK_TAG", data, UART_NUM_1);
+        }
+    }
+    free(data);
+}
+// --------------------------------------------------------------
 
 // LED
 static void configure_led(void)
@@ -183,6 +280,12 @@ void start_webserver(void)
 
 void app_main(void)
 {
+
+    // init UART
+    initUART();
+    // xTaskCreate(tx_task, "uart_tx_task", 1024 * 2, NULL, configMAX_PRIORITIES - 1, NULL);
+    xTaskCreate(readUARTNUM1_DISPLAY, "uart_rx_task", 1024 * 2, NULL, configMAX_PRIORITIES, NULL);
+    xTaskCreate(readUARTNUM0_STM, "uart_rx_task", 1024 * 2, NULL, configMAX_PRIORITIES, NULL);
 
     // init led
     configure_led();

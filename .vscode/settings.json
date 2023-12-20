@@ -1,5 +1,5 @@
 {
     "idf.adapterTargetName": "esp32c6",
-    "C_Cpp.default.compilerPath": "cl.exe",
-    "idf.portWin": "COM3"
+    "C_Cpp.default.compilerPath": "C:\\Espressif\\tools\\tools\\riscv32-esp-elf\\esp-12.2.0_20230208\\riscv32-esp-elf\\bin\\riscv32-esp-elf-g++.exe",
+    "idf.portWin": "COM4"
 }
