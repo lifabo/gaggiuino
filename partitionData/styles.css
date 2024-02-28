@@ -1,0 +1,315 @@
+/* Allgemeines */
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial , sans-serif;
+    font-size: 20pt;
+    background-color: #331D16;
+    color: #947A72;
+}
+
+h1 {
+    font-size: 2em;
+    margin-top: 1%;
+}
+
+h2 {
+    font-size: 1.2em;
+}
+
+h3 {
+    font-size: 1em;
+}
+
+p {
+    font-size: 1em;
+}
+
+a, a:visited {
+    text-decoration: none;
+    color: #822A19;
+}
+
+
+/* HEADER */
+
+header {
+    height: 10%;
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    padding: 1% 5%;
+}
+
+.header__div {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+
+    width: 100%;
+}
+
+.header__logo, .footer__logo {
+    width: 25%;
+}
+
+.header__logo-link {
+    display: flex;
+}
+
+nav {
+    display: flex;
+
+    align-items: center;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+
+    margin: 0;
+    padding: 0;
+}
+
+nav li {
+    margin-right: 20px;
+}
+
+nav a, nav a:visited {
+    /* text-decoration: none; */
+    color: #947A72;
+    font-weight: bold;
+}
+
+nav a:hover {
+    color: #822A19;
+}
+
+.teaser {
+    height: 90vh;
+    max-width: 1920px;
+    position: relative;
+}
+
+.teaser__image {
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+}
+
+.teaser__overlay {
+    background: rgba(148, 122, 114, 0.8);
+    color:#331D16;
+
+    position: absolute;
+    top: 15%;
+    left: 10%;
+
+    padding: 25px;
+    width: 70vw;
+    height: 66vh;
+    box-sizing: border-box;
+}
+
+
+@media (min-width: 768px) {
+    /* Adjustments for larger screens, you can customize the breakpoint as needed */
+    /* .teaser__overlay {
+        width: 50%;
+        left: 10%;
+    } */
+}
+
+@media (min-width: 1200px) {
+    /* Further adjustments for even larger screens */
+    .teaser__overlay {
+        width: 40%;
+        left: 10%;
+    }
+}
+
+.index-content {
+    max-width: 1300px;
+    display: grid;
+    place-items: center;
+    margin-top: 2%;
+
+}
+
+.profilOverview {
+    background-color: #331D16;
+    color: #947A72;
+    padding: 20px;
+    display: flex;
+    justify-content: center; 
+}
+
+.profilOverview__text {
+    width: 40%;
+    margin-left: 15%;
+}
+
+.profilOverview__text hr.divider {
+    width: 30%;
+    border: 0;
+    border-top: 1px solid #6C9396;
+    margin-bottom: 10px;
+    margin-left: 0; /* Added to left-align the divider */
+}
+
+.profilOverview__table {
+    width: 45%;
+    margin-right: 15%;
+    border-collapse: collapse; /* Added to collapse the borders */
+}
+
+.profilOverview__table td {
+    border: 1px solid #913D21; /* Border color for each list element */
+    padding: 8px; /* Add padding for better appearance */
+}
+
+.profilOverview__table-row--empty {
+    background-color: #6C9396; /* Background color for the empty row */
+}
+
+.profilOverview__table-data--alnright {
+    text-align: right;
+}
+
+.profilOverview__table-data--add {
+    background-color: #913D21; /* Button background color */
+    color: #fff; /* Button text color */
+    padding: 10px; /* Adjust padding as needed */
+    font-size: 18px; /* Adjust font size as needed */
+    cursor: pointer;
+    border: none;
+}
+
+
+.table--light {
+    background-color: #947A72;
+    color: #331D16;
+}
+
+/* FOOTER */
+
+footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+.footer__content {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+
+/* New Profil */
+
+form > section{
+    margin-top: 5%;
+    padding: 5%;
+
+    border:rgba(148, 122, 114, 0.8) solid;
+}
+
+.coffeeProfile {
+    display: flexbox;
+    margin: 5% 20%;
+    padding: 4%;
+
+    border: #913D21 solid;
+}
+
+.coffeeProfile__form h2 {
+    margin: 2% 0 4% 0;
+    display: inline;
+}
+
+.coffeeProfile__form p {
+    font-size: 0.7em;
+    font-style: italic;
+
+    margin: 1% 0 3% 0;
+}
+
+.coffeeProfile__form-input-label-pair > label, .coffeeProfile__form-input-label-pair > input {
+    display: inline;
+    margin-top: 3%;
+}
+
+.gaggi__button--red {
+    background-color: #913D21;
+    
+    border-radius: 8px;
+    border-style: none;
+    box-sizing: border-box;
+
+    cursor: pointer;
+
+    font-size: 0.8em;
+    
+    height: 40px;
+    line-height: 20px;
+    padding: 10px 16px;
+    
+    vertical-align: middle;
+    float: right;
+
+
+    transition: color 100ms;
+  
+    text-align: center;
+}
+
+
+.gaggi__button--red:hover,
+.gaggi__button--red:focus {
+    background-color: #822A19;
+}
+
+/* ITEMS */
+.divider--beige {
+    width: 70%;
+    border: 0;
+    border-top: 1px solid #947A72;
+    margin-bottom: 10px;
+    margin-left: 0;
+}
+
+button {
+    margin: 2%;
+    padding: 2% 3%;
+
+    font-size: 0.8em;
+    
+    background-color: #6C9396;
+    color: #331D16;
+
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #331D16;
+    color: #6C9396;
+
+    border-color: #331D16;
+} 
+
+
+
+/* Extras */
+
+.coffeeProfile__form .hidden {
+    display: none;
+}
+
+p.font--red {
+    color:#913D21;
+    font-style: normal;
+}

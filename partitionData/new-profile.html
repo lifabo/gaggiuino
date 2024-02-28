@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/png" href="/favicon.ico">
+    <title>Coffee Website</title>
+
+    <script src="coffee-profile-form.js"></script>
+    <script src="gaggiuino-nav.js"></script>    
+</head>
+<body>
+
+<header class="header" id="gaggiuino-header"></header>
+
+<section class="coffeeProfile">
+    <h1>Kaffee Profil</h1>
+    <p>Lege hier ein neues Kaffee Profil an.</p>
+    <p>Du kannst verschiedene Einstellungen vornehmen. Passe die Parameter der <b>Pre-Infusion-Phase</b>, der <b>Soak-Phase</b> und die Einstellungen für dein <b>Druck-Profil</b> nach deinem Belieben an. </p> 
+
+    <form class="coffeeProfile__form" class="table--light" action="index.html" method="post">
+
+        <!-- Form - Step 1: name -->
+        <section class="coffeeProfile__form-name coffeeProfile__form-section-0--layer-0">
+            <p class="font--red">Step 1: Choose a name for your profile</p>
+            <div class="coffeeProfile__form-input-label-pair layer-0">
+                <label for="coffeeProfile__form-name-ID">Profile name:</label>
+                <input type="text" id="coffeeProfile__form-name-ID" name="name" maxlength="24" required>
+            </div>
+        </section>
+        
+        <!-- Brew Ratio / Dose Settings -->
+        <section class="coffeeProfile__form-BR section-1--layer-0">
+            <p class="font--red">Step 2: Customise your coffee dosage</p>
+        
+            <h2>Brew Ratio / Dose Settings</h2>
+
+            <div class="coffeeProfile__form-input-label-pair">
+                <label for="coffeeProfile__form-BR-stop-on-weight-ID">Stop On Weight</label>
+                <input type="checkbox" id="coffeeProfile__form-BR-stop-on-weight-ID" name="stopOnWeightState">
+            </div>
+            <p>Stop on espresso shot weight. Affects both Hardware and Predictive Scales.</p>
+
+            <div class="coffeeProfile__form-input-label-pair">
+                <label for="coffeeProfile__form-BR-dose-ID">Dose</label>
+                <input type="number" id="coffeeProfile__form-BR-dose-ID" name="shotDose" value="18.0">
+            </div>
+            <p>Input weight of coffee grounds</p>
+
+            <div class="coffeeProfile__form-input-label-pair">
+                <label for="coffeeProfile__form-BR-brew-ratio-ID">Brew Ratio</label>
+                <select id="coffeeProfile__form-BR-brew-ratio-ID" name="shotPreset">
+                    <option value="1">1:1</option>
+                    <option value="2" selected>1:2</option>
+                    <option value="3">1:3</option>
+                    <option value="4">1:4</option>
+                </select>
+            </div>
+            <p>Input weight of coffee grounds compared to the output weight of the espresso shot</p>
+
+            <div class="coffeeProfile__form-input-label-pair">
+                <label for="coffeeProfile__form-BR-shot-weight-override-ID">Shot Weight Override</label>
+                <input type="number" id="coffeeProfile__form-BR-shot-weight-override-ID" name="shotDoseOnCustomWeight" value="0">
+            </div>
+            <p>Manual override of the output weight, completely ignores Coffee Dose and Brew Ratio, set 0 to disable.</p>
+
+        </section>
+        
+        <!-- Pre-Infusion -->
+        <section class="coffeeProfile__form-PI section-2 layer-0">
+            <p class="font--red">Step 3: Customise the pre-infusion phase.</p>
+            <p class="font--red"> The pre-infusion phase fills the basket until a threshold is reached. The idea of pre-infusion is to saturate the puck of coffee, with the aim of increasing evenness of extraction and reducing channeling. It also helps when extracting lighter roasts, which are harder to extract.</p>
+    
+            <div class="coffeeProfile__form-input-label-pair">
+                <label for="coffeeProfile__form-PI-state-ID"><h2>Pre-Infusion</h2></label>
+                <input type="checkbox" id="coffeeProfile__form-PI-state-ID" class="section-2 layer-0" name="preinfusionState">
+            </div>
+            <p>Turns pre-infusion on or off</p>
+
+            <!-- PI - Bar/Flow -->
+            <section class="section-2 layer-1 hidden">
+                <div class="coffeeProfile__form-input-label-pair">
+                    <label for="coffeeProfile__form-PI-flow-ID" id="coffeeProfile__form-PI-flow-label">Flow/Bar</label>
+                    <input type="checkbox" id="coffeeProfile__form-PI-flow-ID" class="layer-1" name="preinfusionFlowState">
+                </div>
+                <p>Determines if flow or pressure is the PI target.</p>
+
+                <!-- PI - FIll -->
+                <section class="section-2 layer-2 hidden">
+                    <div class="coffeeProfile__form-PI-fill">
+                        <h3>Fill</h3>
+                        <p>Target for the pre-infusion phase.</p>
+
+                        <!-- if FlowState == 0, then set on Bar-->
+                        <section class="coffeeProfile__form-PI-bar coffeeProfile__form-PI--layer-2-1 hidden">
+                            <div class="coffeeProfile__form-input-label-pair">
+                                <label for="coffeeProfile__form-PI-bar-time-ID">Time(s)</label>
+                                <input type="number" id="coffeeProfile__form-PI-bar-time-ID" name="preinfusionSec" value="20">
+                            </div>
+                            <p>Target length of the pre-infusion phase in seconds.</p>
+
+                            <div class="coffeeProfile__form-input-label-pair">
+                                <label for="coffeeProfile__form-PI-bar-flow-ml-s-ID">Flow(ml/s)</label>
+                                <input type="number" id="coffeeProfile__form-PI-bar-flow-ml-s-ID" name="preinfusionPressureFlowTarget" value="3">
+                            </div>
+                            <p>Target flow rate for the pre-infusion phase.</p>
+
+                            <div class="coffeeProfile__form-input-label-pair">
+                                <label for="coffeeProfile__form-PI-bar-pressure-ID">Pressure</label>
+                                <input type="number" id="coffeeProfile__form-PI-bar-pressure-ID" name="preinfusionBar" value="4.0">
+                            </div>
+                            <p>Target pressure for the pre-infusion phase.</p>
+                        </section>
+                
+
+                        <!-- if FlowState == 1, then set on Flow-->
+                        <section class="coffeeProfile__form-PI-flow coffeeProfile__form-PI--layer-2-1 hidden">
+                            <div class="coffeeProfile__form-input-label-pair">
+                                <label for="coffeeProfile__form-PI-flow-time-ID">Time(s)</label>
+                                <input type="number" id="coffeeProfile__form-PI-flow-time-ID" name="preinfusionFlowTime" value="20">
+                            </div>
+                            <p>Target length of the pre-infusion phase in seconds</p>
+
+                            <div class="coffeeProfile__form-input-label-pair">
+                                <label for="coffeeProfile__form-PI-flow-flow-ml-s-ID">Flow(ml/s)</label>
+                                <input type="number" id="coffeeProfile__form-PI-flow-flow-ml-s-ID" name="preinfusionFlowVol" value="3">
+                            </div>
+                            <p>Target flow rate for the pre-infusion phase.</p>
+
+                            <div class="coffeeProfile__form-input-label-pair">
+                                <label for="coffeeProfile__form-PI-flow-pressure-ID">Pressure</label>
+                                <input type="number" id="coffeeProfile__form-PI-flow-pressure-ID" name="preinfusionFlowPressureTarget" value="4.0">
+                            </div>
+                            <p>Target pressure for the pre-infusion phase.</p>
+                        </section>
+                    </section>
+                </div> 
+                <!-- -->
+
+                <!-- PI - Switch on -->
+                <div class="coffeeProfile__form-PI--switch-on">
+                    <hr class="divider--beige">
+
+                    <h3>Switch on</h3>
+                    <p>When one of the following trigger, move on to the Soak phase.</p>
+
+                    <div class="coffeeProfile__form-input-label-pair">
+                        <label for="coffeeProfile__form-PI-filled-ID">Filled</label>
+                        <input type="number" id="coffeeProfile__form-PI-filled-ID" name="preinfusionFilled" value="60.0">
+                    </div>
+                    <p>Exit when amount water pumped is set value in mL.</p>
+
+                    <div class="coffeeProfile__form-input-label-pair layer-1">
+                        <label for="coffeeProfile__form-PI-pressure-above-ID">Pressure Above</label>
+                        <input type="checkbox" id="coffeeProfile__form-PI-pressure-above-ID" name="preinfusionPressureAbove">
+                    </div>
+                    <p>Pressure as an exit criteria if true or as a restriction if false.</p>
+
+                    <div class="coffeeProfile__form-input-label-pair layer-1">
+                        <label for="coffeeProfile__form-PI-weight-above-ID">Weight Above</label>
+                        <input type="number" id="coffeeProfile__form-PI-weight-above-ID" name="preinfusionWeightAbove" value="4.0">
+                    </div>
+                    <p>Exit when weight is above set value in grams.</p>
+                </div>
+            </section>
+        </section>
+
+        <!-- Soak -->
+        <section class="coffeeProfile__form-SK">
+            <p class="font--red">Step 4: Customise the soak phase. </p>
+            <p class="font--red">The soak phase turns the pump off completely allowing to built pressure during the pre-infusion phase to penetrate the puck naturally. This helps because it theoretically allows some of the trapped C02 from roasting coffee to escape, allowing easier extractions. If you have a darker roast, you might or might not want to do this phase, since darker roasts are easier to extract.</p>
+
+            <div class="coffeeProfile__form-input-label-pair coffeeProfile__form-SK--layer-0">
+                <label for="coffeeProfile__form-SK-state-ID"><h2>Soak</h2></label>
+                <input type="checkbox" id="coffeeProfile__form-SK-state-ID" class="layer-0" name="soakState">
+            </div>
+            <p>Turns soak on or off.</p>
+
+            <!-- BEARBEITEN TIME -->
+            <!-- !!!!!!!!!!!!!!! -->
+            <section class="coffeeProfile__form-SK--layer-1 hidden">
+                <!-- Target -->
+                <div class="coffeeProfile__form-SK-target">
+                    <hr class="divider--beige">
+
+                    <h3>Target</h3>
+                    <p>Target for the Soak phase. If you keep only one above 0, then the system will aim to maintain that target during the soak phase. If more than one are above zero, the system interprets that as a pressure target with a flow restriction. if you say don't pump any water in (i.e. both are 0) then pressure will gradually fall as the puck resistance falls, resulting in a decline in pressure and/or increase in weight.</p>
+                    
+                    <section class="layer-2 hidden">
+                        <!-- if Pre-Infusion in Bar, then Soak-Time is Soak-Time-Pressure -->
+                        <div class="coffeeProfile__form-input-label-pair coffeeProfile__form-SK--layer-2-1 hidden">
+                            <label for="coffeeProfile__form-SK-bar-time-ID">Time</label>
+                            <input type="number" id="coffeeProfile__form-SK-bar-time-ID" name="soakTimePressure" value="30">
+                        </div>
+
+                        <!-- if Pre-Infusion in Flow, then Soak-Time is Soak-Time-Flow -->
+                        <div class="coffeeProfile__form-input-label-pair coffeeProfile__form-SK--layer-2-2 hidden">
+                            <label for="coffeeProfile__form-SK-flow-time-ID">Time</label>
+                            <input type="number" id="coffeeProfile__form-SK-flow-time-ID" name="soakTimeFlow" value="30">
+                        </div>
+                    </section>
+
+                    <div class="coffeeProfile__form-input-label-pair">
+                        <label for="coffeeProfile__form-SK-maintain-pressure-ID">Maintain Pressure</label>
+                        <input type="number" id="coffeeProfile__form-SK-maintain-pressure-ID" name="soakKeepPressure" value="0.0">
+                    </div>
+                    <p>Machine will attempt to maintain pressure at set value in bars.</p>
+
+                    <div class="coffeeProfile__form-input-label-pair">
+                        <label for="coffeeProfile__form-SK-maintain-flow-ID">Maintain Flow</label>
+                        <input type="number" id="coffeeProfile__form-SK-maintain-flow-ID" name="soakKeepFlow" value="0.0">
+                    </div>
+                    <p>Machine will attempt to maintain flow at set value in mL/s.</p>
+                </div>
+                <!-- Switch On -->
+                <div class="coffeeProfile__form-SK-switch-on">
+                    <hr class="divider--beige">
+
+                    <h3>Switch On</h3>
+                    <p>When one of the following trigger, move on to the Pressure Profile phase.</p>
+
+                    <div class="coffeeProfile__form-input-label-pair">
+                        <label for="coffeeProfile__form-SK-weight-above-ID">Weight Above</label>
+                        <input type="number" id="coffeeProfile__form-SK-weight-above-ID" name="soakAboveWeight" value="4.0">
+                    </div>
+                    <p>Exit when weight is above set value in grams.</p>
+
+                    <div class="coffeeProfile__form-input-label-pair">
+                        <label for="coffeeProfile__form-SK-pressure-above-ID">Pressure Above</label>
+                        <input type="number" id="coffeeProfile__form-SK-pressure-above-ID" name="soakAbovePressure" value="0.0">
+                    </div>
+                    <p>Exit when pressure is above set value in bars.</p>
+
+                    <div class="coffeeProfile__form-input-label-pair">
+                        <label for="coffeeProfile__form-SK-pressure-below-ID">Pressure Below</label>
+                        <input type="number" id="coffeeProfile__form-SK-pressure-below-ID" name="soakBelowPressure" value="2.0">
+                    </div>
+                    <p>Exit when Pressure is below set value in bars.</p>
+                </div>
+                <!-- Ramp/Slope - Pi -> PF -->
+                <div class="coffeeProfile__form-SK-slope">
+                    <hr class="divider--beige">
+                    <div class="coffeeProfile__form-input-label-pair">
+                        <label for="coffeeProfile__form-SK-slope-time-ID">Slope Time</label>
+                        <input type="number" id="coffeeProfile__form-SK-slope-time-ID" name="preinfusionRamp" value="5">
+                    </div>
+                    <p>Number of seconds it should take to get to the target.</p>
+
+                    <div class="coffeeProfile__form-input-label-pair">
+                        <label for="coffeeProfile__form-SK-slope-type-ID">Slope Type</label>
+                        <select id="coffeeProfile__form-SK-slope-type-ID" name="preinfusionRampSlope">
+                            <option value="1">Ease-In</option>
+                            <option value="2" selected>Ease-Out</option>
+                            <option value="3">Ease-In-Out</option>
+                            <option value="4">Linear</option>
+                            <option value="5">Instant</option>
+                        </select>
+                    </div>
+                    <p>Curve type, which corresponds to how the machine will get to its target. See Easing section.</p>
+                </div>
+            </section>
+        </section>
+
+        <!-- Advanced Profiling - Soak to Profile-->
+        <section class="coffeeProfile__form-APL">
+            <p class="font--red">Step 5: Customise the transition between the soak- and the profiling-phase.</p>
+            <p class="font--red">The Transition phase in between soak and profiling. Use this if you want to hold a target for a specified amount before profiling.</p>
+
+            <div class="coffeeProfile__form-input-label-pair coffeeProfile__form-APL--layer-0">
+                <label for="coffeeProfile__form-APL-state-ID"><h2>Soak to profile transition</h2></label>
+                <input type="checkbox" id="coffeeProfile__form-APL-state-ID" class="layer-0" name="tpState">
+            </div>
+            <p>Turns transition on or off.</p>
+
+            <section class="coffeeProfile__form-APL--layer-1 hidden"> 
+
+                <div class="coffeeProfile__form-input-label-pair">
+                    <label for="coffeeProfile__form-APL-type-ID">Flow / Bar</label>
+                    <input type="checkbox" id="coffeeProfile__form-APL-type-ID" class="layer-1" name="tpType">
+                </div>
+                <p>Determines if flow or pressure is the transition target.</p>
+                
+                <!-- if transition-type == 0, then set on Bar-->
+                <section class="coffeeProfile__form-APL-bar coffeeProfile__form-APL--layer-2-1 hidden">
+                    <label for="coffeeProfile__form-APL-bar-start-ID">Start</label>
+                    <input type="number" id="coffeeProfile__form-APL-bar-start-ID" name="tpProfilingStart" value="7.5">
+
+                    <label for="coffeeProfile__form-APL-bar-end-ID">End</label>
+                    <input type="number" id="coffeeProfile__form-APL-bar-end-ID" name="tpProfilingFinish" value="6.0">
+                    
+                    <label for="coffeeProfile__form-APL-bar-hold-ID">Hold</label>
+                    <input type="number" id="coffeeProfile__form-APL-bar-hold-ID" name="tpProfilingHold" value="0">
+
+                    <label for="coffeeProfile__form-APL-bar-slope-time-ID">Slope Time</label>
+                    <input type="number" id="coffeeProfile__form-APL-bar-slope-time-ID" name="tpProfilingSlope" value="4">
+
+                    <label for="coffeeProfile__form-APL-bar-limit-ID">Limit</label>
+                    <input type="number" id="coffeeProfile__form-APL-bar-limit-ID" name="tpProfilingFlowRestriction" value="3.0">
+
+                    <label for="coffeeProfile__form-APL-bar-hold-limit-ID">Hold Limit</label>
+                    <input type="number" id="coffeeProfile__form-APL-bar-hold-limit-ID" name="tpProfilingHoldLimit" value="3.0">
+
+                    <label for="coffeeProfile__form-APL-bar-slope-type-ID">Slope Type</label>
+                    <select id="coffeeProfile__form-APL-bar-slope-type-ID" name="tpProfilingSlopeShape">
+                        <option value="0">Ease-In</option>
+                        <option value="1">Ease-Out</option>
+                        <option value="2">Ease-In-Out</option>
+                        <option value="3">Linear</option>
+                        <option value="4">Instant</option>
+                    </select>
+                </section>
+
+                <!-- if transition-type == 1, then set on Flow-->
+                <section class="coffeeProfile__form-APL-flow coffeeProfile__form-APL--layer-2-1 hidden">
+                    <label for="coffeeProfile__form-APL-flow-start-ID">Start</label>
+                    <input type="number" id="coffeeProfile__form-APL-flow-start-ID" name="tfProfileStart" value="7.5">
+
+                    <label for="coffeeProfile__form-APL-flow-end-ID">End</label>
+                    <input type="number" id="coffeeProfile__form-APL-flow-end-ID" name="tfProfileEnd" value="6.0">
+                    
+                    <label for="coffeeProfile__form-APL-flow-hold-ID">Hold</label>
+                    <input type="number" id="coffeeProfile__form-APL-flow-hold-ID" name="tfProfileHold" value="0">
+
+                    <label for="coffeeProfile__form-APL-flow-slope-time-ID">Slope Time</label>
+                    <input type="number" id="coffeeProfile__form-APL-flow-slope-time-ID" name="tfProfileSlope" value="4">
+
+                    <label for="coffeeProfile__form-APL-flow-limit-ID">Limit</label>
+                    <input type="number" id="coffeeProfile__form-APL-flow-limit-ID" name="tfProfilingPressureRestriction" value="3.0">
+
+                    <label for="coffeeProfile__form-APL-flow-hold-limit-ID">Hold Limit</label>
+                    <input type="number" id="coffeeProfile__form-APL-flow-hold-limit-ID" name="tfProfileHoldLimit" value="3.0">
+
+                    <label for="coffeeProfile__form-APL-flow-slope-type-ID">Slope Type</label>
+                    <select id="coffeeProfile__form-APL-flow-slope-type-ID" name="tfProfileSlopeShape">
+                        <option value="0">Ease-In</option>
+                        <option value="1">Ease-Out</option>
+                        <option value="2">Ease-In-Out</option>
+                        <option value="3">Linear</option>
+                        <option value="4">Instant</option>
+                    </select>
+                </section>
+            </section>
+        </section>
+
+        <!-- Profiling / Main Profile -->
+        <section class="coffeeProfile__form-PL">
+            <p class="font--red">Step 6: Customise the profiling phase.</p>           
+
+            <div class="coffeeProfile__form-input-label-pair coffeeProfile__form-PL--layer-0">
+                <label for="coffeeProfile__form-PL-state-ID"><h2>Profiling</h2></label>
+                <input type="checkbox" id="coffeeProfile__form-PL-state-ID" class="layer-0" name="profilingState">
+            </div>
+            <p>Turns profiling on or off.</p>
+
+            <section class="coffeeProfile__form-PL--layer-1 hidden">
+                <div class="coffeeProfile__form-input-label-pair">
+                    <label for="coffeeProfile__form-PL-type-ID">Type</label>
+                    <input type="checkbox" id="coffeeProfile__form-PL-type-ID" class="layer-1" name="mfProfileState">
+                </div>
+                <p>Determines if flow or pressure is the profile target.</p>
+
+                <!-- if profile-type == 0, then set on Bar-->
+                <section class="coffeeProfile__form-PL-bar hidden coffeeProfile__form-PL--layer-2-1">
+                    <div class="coffeeProfile__form-input-label-pair">
+                        <label for="coffeeProfile__form-PL-bar-start-ID">Start</label>
+                        <input type="number" id="coffeeProfile__form-PL-bar-start-ID" name="mpProfilingStart" value="2.5">
+                    </div>
+
+                    <div class="coffeeProfile__form-input-label-pair">
+                        <label for="coffeeProfile__form-PL-bar-end-ID">End</label>
+                        <input type="number" id="coffeeProfile__form-PL-bar-end-ID" name="mpProfilingFinish" value="1.0">
+                    </div>
+
+                    <div class="coffeeProfile__form-input-label-pair">
+                        <label for="coffeeProfile__form-PL-bar-slope-time-ID">Slope Time</label>
+                        <input type="number" id="coffeeProfile__form-PL-bar-slope-time-ID" name="mpProfilingSlope" value="15">
+                    </div>
+
+                    <div class="coffeeProfile__form-input-label-pair">
+                        <label for="coffeeProfile__form-PL-bar-pressure-limit-ID">Limit</label>
+                        <input type="number" id="coffeeProfile__form-PL-bar-pressure-limit-ID" name="mpProfilingFlowRestriction" value="6.0">
+                    </div>
+
+                    <div class="coffeeProfile__form-input-label-pair">
+                        <label for="coffeeProfile__form-PL-bar-slope-type-ID">Slope Type</label>
+                        <select id="coffeeProfile__form-PL-bar-slope-type-ID" name="mpProfilingSlopeShape">
+                            <option value="0">Ease-In</option>
+                            <option value="1">Ease-Out</option>
+                            <option value="2" selected>Ease-In-Out</option>
+                            <option value="3">Linear</option>
+                            <option value="4">Instant</option>
+                        </select>
+                    </div>
+                </section>
+
+                <!-- if profile-type == 1, then set on Flow-->
+                <section class="coffeeProfile__form-PL-flow hidden coffeeProfile__form-PL--layer-2-2">
+                    <div class="coffeeProfile__form-input-label-pair">
+                        <label for="coffeeProfile__form-PL-flow-start-ID">Start (ml/s)</label>
+                        <input type="number" id="coffeeProfile__form-PL-flow-start-ID" name="mfProfileStart" value="2.5">
+                    </div>
+
+                    <div class="coffeeProfile__form-input-label-pair">
+                        <label for="coffeeProfile__form-PL-flow-end-ID">End (ml/s)</label>
+                        <input type="number" id="coffeeProfile__form-PL-flow-end-ID" name="mfProfileEnd" value="1.0">
+                    </div>
+
+                    <div class="coffeeProfile__form-input-label-pair">
+                        <label for="coffeeProfile__form-PL-flow-slope-time-ID">Slope Time</label>
+                        <input type="number" id="coffeeProfile__form-PL-flow-slope-time-ID" name="mfProfileSlope" value="15">
+                    </div>
+
+                    <div class="coffeeProfile__form-input-label-pair">
+                        <label for="coffeeProfile__form-PL-flow-pressure-limit-ID">Limit</label>
+                        <input type="number" id="coffeeProfile__form-PL-flow-pressure-limit-ID" name="mfProfilingPressureRestriction" value="6.0">
+                    </div>
+
+                    <div class="coffeeProfile__form-input-label-pair">
+                        <label for="coffeeProfile__form-PL-flow-slope-type-ID">Slope Type</label>
+                        <select id="coffeeProfile__form-PL-flow-slope-type-ID" name="mfProfileSlopeShape">
+                            <option value="0">Ease-In</option>
+                            <option value="1">Ease-Out</option>
+                            <option value="2" selected>Ease-In-Out</option>
+                            <option value="3">Linear</option>
+                            <option value="4">Instant</option>
+                        </select>
+                    </div>
+                </section>
+            </section>
+        </section>
+
+        <input class="coffeeProfile__form-send-button gaggi__button--red" type="submit" value="Profil speichern">
+    </form>
+</section>
+
+<!--
+<section class="profile">
+    <div class="profile__heading">
+        <h3>Profil - Übersicht</h3>
+    </div>
+    <table class="profile__table" class="table--light">
+        <tr class="empty-row">
+            <td class="alnright">
+                <button class="add-button">+</button>
+            </td>
+        </tr>
+        <tr>
+            <td>IUIUIU Classic</td>
+        </tr>
+        <tr>
+            <td>Londinium</td>
+        </tr>
+        <tr>
+            <td>Adaptive</td>
+        </tr>
+    </table>
+</section>
+
+-->
+
+<footer>
+    <!--<div class="footer-content">
+        <img class="header__logo" src="Gaggiuino-Logo.png">
+        <nav>
+            <ul>
+                <li><a href="index.html#aboutUsID">About Us</a></li>
+            </ul>
+        </nav>
+    </div> -->
+    <div class="copyright">
+        <p>&copy; 2023 Maker Space. All rights reserved.</p>
+    </div>
+</footer>
+
+</body>
+</html>

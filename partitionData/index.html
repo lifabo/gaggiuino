@@ -1,18 +1,95 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../storage/styles.css">
+    <link rel="icon" type="image/png" href="/favicon.ico">
+    <title>Gaggiuino Website</title>
 
+    <script src="gaggiuino-nav.js"></script>
+    <script src="profile-overview.js"></script>
 </head>
 
 <body>
-    <h3>Hello World</h3>
-    <button id="reloadButton" onclick="reloadPage()">Toggle LED</button>
 
-    <script>
-        function reloadPage() {
-            location.reload(true);
-        }
-    </script>
+    <header class="header" id="gaggiuino-header"></header>
+
+    <section class="teaser">
+        <img class="teaser__image" src="coffee-beans.jpg">
+        <div class="teaser__overlay">
+            <h1>FH Aachen meets Gaggiuino</h1>
+            <p>Die smarte Siebträgermaschine der FH Aachen ist da. Probiere sie aus und brühe Kaffee nach deinem
+                Geschmack.</p>
+            <div class="teaser__buttons">
+                <button><a href="#profileOverviewID">Kaffee brauen</a></button>
+                <button><a href="new-profile.html">Profile anlegen</a></button>
+            </div>
+        </div>
+        </div>
+    </section>
+
+    <section class="index-content">
+        <section id="profileOverviewID" class="profileOverview">
+            <div class="profileOverview__text">
+                <h2>Kaffee Profile</h2>
+                <hr class="divider">
+                <h3>Wähle eines der Kaffee Profile aus oder lege ein neues an</h3>
+                <p>Hier steht dann noch mehr Text, warum man diese Funktion verwenden sollte. Sehr inspirierend und
+                    technisch versiert. Eine Meisterleistung.</p>
+            </div>
+            <table class="profileOverview__table">
+                <tr class="profileOverview__table-row--empty">
+                    <td class="profileOverview__table-data--alnright">
+                        <button class="profileOverview__table-data--add"><a href="new-profile.html">+</a></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>IUIUIU Classic</td>
+                </tr>
+                <tr>
+                    <td>Londinium</td>
+                </tr>
+                <tr>
+                    <td>Adaptive</td>
+                    <!-- Add more options as needed -->
+                </tr>
+            </table>
+        </section>
+
+        <section id="aboutUsID" class="aboutUs">
+            <h2>About Us</h2>
+            <hr class="divider">
+            <h3>FH Aachen meets Gaggiuino</h3>
+            <p>Die smarte Siebträgermaschine "Gaggiuino" wurde an der FH Aachen von einer Gruppe Student*innen gebaut.
+                Die Aktion kam durch ein interdisziplinäres Projekt zustande. In dem Projekt arbeiten Studierende aus
+                verschiedenen Studiengängen zusammen. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+                exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+                reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat
+                cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+            <img src="coffee.jpg">
+            <button>Read more</button>
+        </section>
+
+    </section>
+
+    <footer>
+        <div class="footer__content">
+            <div><img class="footer__logo" src="Gaggiuino-Logo.png"></div>
+            <nav>
+                <ul>
+                    <li><a href="#">Back to start</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2023 Your Company. All rights reserved.</p>
+        </div>
+    </footer>
+
 </body>
 
 </html>
